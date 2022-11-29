@@ -1,0 +1,65 @@
+#!/bin/bash
+
+install() {
+  # prepare vars
+  local name="$PACKAGE_CORE_NAME"
+
+  log::info "[$(timestamp)][package][$name] preparing ..."
+
+  # get system os/arch
+  local arch="$PACKAGE_OS_ARCH"
+  local kernel="$PACKAGE_OS_KERNEL"
+  local platform="$PACKAGE_OS_PLATFORM"
+  # usr_bin_dir
+  local usr_bin_dir="$PACKAGE_USER_BIN_DIR"
+  local tmp_dir="$PACKAGE_TMP_DIR"
+
+  if [ "$arch" = "amd64" ]; then
+    arch="x86_64"
+  else if [ "$arch" = "arm64" ]; then
+    if [ "$platform"  = "darwin" ]; then
+      arch="arm64"
+    else if [ "$platform" = "linux" ]; then
+      arch="aarch64"
+    else
+      log::error "[$(timestamp)] unsupported arch: $arch"
+      return 1
+    fi
+  else 
+    log::error "[$(timestamp)] unsupported arch: $arch"
+    return 1
+  fi
+
+  # files
+  local tmp_file="${name}-${kernel}-${arch}"
+  local bin_file="$tmp_file"
+
+  # prepare context
+  cd $tmp_dir
+
+  # reference: https://github.com/9seconds/colima/releases
+  # example:
+  #   https://github.com/abiosoft/colima/releases/download/v0.4.6/colima-Darwin-arm64
+  #   https://github.com/abiosoft/colima/releases/download/v0.4.6/colima-Darwin-x86_64
+  # generate url
+  local url="${PACKAGE_CORE_RELEASE_DOWNLOAD}/$PACKAGE_CORE_VERSION/${name}-${kernel}-${arch}"
+  log::debug "[$(timestamp)][package][$name][$kernel][$arch] url: $url, file: ${tmp_file}, tmp_dir: $tmp_dir"
+
+  # download
+  log::info "[$(timestamp)][package][$name] downloading ..."
+  os::download $tmp_file $url
+
+  # make executable
+  log::info "[$(timestamp)][package][$name] making executable ..."
+  chmod 755 $bin_file
+
+  # install
+  log::info "[$(timestamp)][package][$name] installing ..."
+  sudo mv $bin_file $usr_bin_dir
+
+  # clean
+  log::info "[$(timestamp)][package][$name] cleaning ..."
+  rm -rf $tmp_dir
+}
+
+export -f install
