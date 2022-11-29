@@ -1,6 +1,8 @@
 #!/bin/bash
 
 install() {
+  set -e
+
   # prepare vars
   local name="$PACKAGE_CORE_NAME"
 
@@ -16,10 +18,10 @@ install() {
 
   if [ "$arch" = "amd64" ]; then
     arch="x86_64"
-  else if [ "$arch" = "arm64" ]; then
+  elif [ "$arch" = "arm64" ]; then
     if [ "$platform"  = "darwin" ]; then
       arch="arm64"
-    else if [ "$platform" = "linux" ]; then
+    elif [ "$platform" = "linux" ]; then
       arch="aarch64"
     else
       log::error "[$(timestamp)] unsupported arch: $arch"
@@ -37,7 +39,7 @@ install() {
   # prepare context
   cd $tmp_dir
 
-  # reference: https://github.com/9seconds/colima/releases
+  # reference: https://github.com/abiosoft/colima/releases
   # example:
   #   https://github.com/abiosoft/colima/releases/download/v0.4.6/colima-Darwin-arm64
   #   https://github.com/abiosoft/colima/releases/download/v0.4.6/colima-Darwin-x86_64
@@ -55,7 +57,7 @@ install() {
 
   # install
   log::info "[$(timestamp)][package][$name] installing ..."
-  sudo mv $bin_file $usr_bin_dir
+  sudo mv $bin_file $usr_bin_dir/$name
 
   # clean
   log::info "[$(timestamp)][package][$name] cleaning ..."
