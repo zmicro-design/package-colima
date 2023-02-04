@@ -1,5 +1,17 @@
 #!/bin/bash
 
+check_dependencies() {
+  if [ "$(os::has_command qemu-img)" != "true" ]; then
+    log::warn "[$(timestamp)] qemu not installed, installing ..."
+    zmicro package install qemu
+  fi
+
+  if [ "$(os::has_command lima)" != "true" ]; then
+    log::warn "[$(timestamp)] lima not installed, installing ..."
+    zmicro package install lima
+  fi
+}
+
 install() {
   set -e
 
@@ -63,5 +75,7 @@ install() {
   log::info "[$(timestamp)][package][$name] cleaning ..."
   rm -rf $tmp_dir
 }
+
+export -f check_dependencies
 
 export -f install
