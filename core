@@ -19,7 +19,7 @@ install() {
   if [ "$arch" = "amd64" ]; then
     arch="x86_64"
   elif [ "$arch" = "arm64" ]; then
-    if [ "$platform"  = "darwin" ]; then
+    if [ "$platform" = "darwin" ]; then
       arch="arm64"
     elif [ "$platform" = "linux" ]; then
       arch="aarch64"
@@ -27,7 +27,7 @@ install() {
       log::error "[$(timestamp)] unsupported arch: $arch"
       return 1
     fi
-  else 
+  else
     log::error "[$(timestamp)] unsupported arch: $arch"
     return 1
   fi
