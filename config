@@ -1,5 +1,5 @@
 #!/bin/bash
 
 export PACKAGE_CORE_NAME="colima"
-export PACKAGE_CORE_VERSION=v0.8.1
+export PACKAGE_CORE_VERSION=v0.8.4
 export PACKAGE_CORE_RELEASE_DOWNLOAD="https://github.com/abiosoft/colima/releases/download"
