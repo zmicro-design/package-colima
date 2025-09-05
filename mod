@@ -1,5 +1,5 @@
 NAME=colima
-VERSION=v1.2.5
+VERSION=v1.2.6
 MODULE=package
 DESCRIPTION="Highly opinionated MTPROTO proxy for Telegram"
 
